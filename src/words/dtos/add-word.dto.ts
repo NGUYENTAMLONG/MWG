@@ -16,11 +16,9 @@ export class AddWordDto {
 
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
   example: string;
 
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
   meaning: string;
 }

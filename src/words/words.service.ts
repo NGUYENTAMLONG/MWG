@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { uuid } from 'uuidv4';
@@ -37,7 +37,6 @@ export class WordsService {
   async sendWord(payload: SendWordDto): Promise<any> {
     try {
       const { word } = payload;
-
       const url = `https://api.wordnik.com/v4/word.json/${word}/definitions?limit=200&includeRelated=false&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5`;
       const studiedWord = await (await this.http.get(url).toPromise()).data;
       // return studiedWord;
@@ -57,6 +56,11 @@ export class WordsService {
         payload.some(function (el, i) {
           if (el.hasOwnProperty('text') && el.exampleUses.length !== 0) {
             return (foundNewWord = el);
+          } else {
+            throw new HttpException(
+              'Infomation not found!',
+              HttpStatus.NOT_FOUND,
+            );
           }
         });
         const newWord: ILearnWord = {
@@ -66,11 +70,10 @@ export class WordsService {
           example: foundNewWord.exampleUses[0].text,
           meaning: foundNewWord.text,
         };
-        return newWord;
-
-        //  const addedWord = await this.wordRepository.save(newWord);
+        const addedWord = await this.wordRepository.save(newWord);
+        return { message: 'Added new word', addedWord };
       } else {
-        return foundWord;
+        return { message: 'Available word', foundWord };
       }
     } catch (error) {
       console.log(error);
