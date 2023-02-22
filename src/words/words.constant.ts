@@ -58,7 +58,7 @@ export const WORD_SWAGGER_RESPONSE = {
       code: 'us00001',
       statusCode: 404,
     },
-    'not found exception',
+    'Word not found exception',
   ),
   DELETE_SUCCESS: swaggerSchemaExample(
     {
