@@ -9,7 +9,7 @@ import {
 
 @Entity()
 export class WordEntity extends BaseEntity {
-  @Column({ type: 'varchar', length: 30, nullable: false })
+  @Column({ type: 'varchar', nullable: false })
   @Index({ unique: true })
   wId: string;
 

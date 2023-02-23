@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { AddWordDto } from './dtos/add-word.dto';
+import { SendWordDto } from './dtos/send-word.dto';
 import { WordsService } from './words.service';
 
 @Controller('words')
@@ -14,5 +15,10 @@ export class WordsController {
   @Post('add')
   create(@Body() word: AddWordDto): Promise<any> {
     return this.wordService.addWord(word);
+  }
+
+  @Post('learn')
+  learn(@Body() word: SendWordDto): Promise<any> {
+    return this.wordService.sendWord(word);
   }
 }
