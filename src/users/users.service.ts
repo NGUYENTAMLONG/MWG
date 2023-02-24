@@ -5,16 +5,19 @@ import { uuid } from 'uuidv4';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { ProfileEntity } from './entities/profile.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(ProfileEntity)
+    private readonly profileRepository: Repository<ProfileEntity>,
   ) {}
 
-  async getUserList(): Promise<UserEntity[]> {
-    return await this.userRepository.find();
+  getUserList(): Promise<UserEntity[]> {
+    return this.userRepository.find();
   }
 
   async createUser(payload: CreateUserDto): Promise<UserEntity> {
@@ -27,9 +30,16 @@ export class UsersService {
         password: hashedPassword,
       };
       const savedUser = await this.userRepository.save(newUser);
+      await this.profileRepository.save({
+        user: savedUser,
+      });
       return savedUser;
     } catch (error) {
       return error;
     }
   }
+
+  async createProfile(payload) {}
+
+  async uploadAvatar(payload) {}
 }
