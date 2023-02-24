@@ -1,6 +1,22 @@
 import { swaggerSchemaExample } from 'src/share/utils/swagger_schema';
+import { IProfile } from './interfaces/user.interface';
 
-export const WORD_SWAGGER_RESPONSE = {
+export const PROFILE_SCOPE: IProfile = {
+  address: 'address',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  gender: 'gender',
+  nickname: 'nickname',
+  phone_number: 'phonenumber',
+};
+
+export enum UserGender {
+  MALE = 'male',
+  FEMALE = 'female',
+  OTHER = 'other',
+}
+
+export const USER_SWAGGER_RESPONSE = {
   CREATE_SUCCESS: swaggerSchemaExample(
     {
       data: {

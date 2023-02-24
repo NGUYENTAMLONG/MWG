@@ -1,8 +1,7 @@
 import {
-  HttpException,
   Injectable,
-  HttpStatus,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
@@ -111,8 +110,14 @@ export class WordsService {
     }
   }
   async handleMatchWord(payload: SendWordDto): Promise<any> {
+    //check used word
+    await this.checkWordHasBeenUsed(payload.word);
+
+    //check last character
+    const lastCharactor = payload.word.at(-1);
+    await this.checkLastCharacter(payload.word, lastCharactor);
+
     try {
-      const lastCharactor = payload.word.at(-1);
       //store array of user
       this.usedWordsOfUser.push(payload.word);
       const foundMathWords = await this.wordRepository.find({
@@ -126,10 +131,9 @@ export class WordsService {
         this.usedWordsOfServer,
         lodash.isEqual,
       );
-      //random word
       if (difWords.length !== 0) {
         const foundMatchWord =
-          difWords[Math.floor(Math.random() * difWords.length)];
+          difWords[Math.floor(Math.random() * difWords.length)]; //random word
         console.log({
           usedWordOfUser: this.usedWordsOfUser,
           usedWordsOfServer: this.usedWordsOfServer,
@@ -137,10 +141,29 @@ export class WordsService {
         this.usedWordsOfServer.push(foundMatchWord);
         return foundMatchWord;
       } else {
-        return 'LOSE';
+        throw new NotFoundException(WORD_SWAGGER_RESPONSE.SERVER_LOSE);
       }
     } catch (error) {
       return error;
+    }
+  }
+  async checkWordHasBeenUsed(word: string): Promise<any> {
+    if (this.usedWordsOfUser.includes(word)) {
+      throw new BadRequestException(WORD_SWAGGER_RESPONSE.BAD_REQUEST_WAS_USE);
+    }
+  }
+  async checkLastCharacter(
+    word: string,
+    lastCharacterWordOfUser: string,
+  ): Promise<any> {
+    const prevWordOfServer = this.usedWordsOfServer.pop();
+    if (prevWordOfServer) {
+      const lastCharactorWordOfServer = prevWordOfServer.at(-1);
+      if (lastCharacterWordOfUser !== lastCharactorWordOfServer) {
+        throw new BadRequestException(
+          WORD_SWAGGER_RESPONSE.BAD_REQUEST_NOT_MATCHING,
+        );
+      }
     }
   }
 }
