@@ -25,8 +25,4 @@ export class UserEntity extends BaseEntity {
     default: '/avatars/avatar-default.jpg',
   })
   avatar: string;
-
-  @OneToOne(() => ProfileEntity, (profile) => profile.user)
-  @JoinColumn()
-  profile: ProfileEntity;
 }

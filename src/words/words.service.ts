@@ -23,8 +23,8 @@ export class WordsService {
 
   private readonly usedWordsOfUser = [];
   private readonly usedWordsOfServer = [];
-  async getList(): Promise<WordEntity[]> {
-    return await this.wordRepository.find();
+  getList(): Promise<WordEntity[]> {
+    return this.wordRepository.find();
   }
 
   async addWord(payload: AddWordDto): Promise<WordEntity> {
