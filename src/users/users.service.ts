@@ -42,4 +42,16 @@ export class UsersService {
   async createProfile(payload) {}
 
   async uploadAvatar(payload) {}
+
+  async findOneById(userId: number): Promise<UserEntity> {
+    return await this.userRepository.findOne({
+      where: { id: userId },
+    });
+  }
+
+  async findOneByUsername(username: string): Promise<UserEntity> {
+    return await this.userRepository.findOne({
+      where: { username: username },
+    });
+  }
 }
