@@ -67,31 +67,17 @@ export class UsersService {
 
   async createProfile(payload) {}
 
-  async uploadAvatar(userId: number, filename: string): Promise<any> {
-    try {
-      const storedDest = await this.userRepository.update(userId, {
-        avatar: filename,
-      });
-      if (storedDest.affected === 1)
-        return USER_SWAGGER_RESPONSE.UPDATE_SUCCESS;
-    } catch (error) {
-      return error;
-    }
+  async uploadAvatar(payload) {}
+
+  async findOneById(userId: number): Promise<UserEntity> {
+    return await this.userRepository.findOneByConditions({
+      where: { id: userId },
+    });
   }
 
-  async getProfile(userId): Promise<ProfileEntity> {
-    try {
-      const conditions = {
-        where: {
-          userId,
-        },
-      };
-      const foundProfile = await this.profileRepository.findOneByConditions(
-        conditions,
-      );
-      return foundProfile;
-    } catch (error) {
-      return error;
-    }
+  async findOneByUsername(username: string): Promise<UserEntity> {
+    return await this.userRepository.findOneByConditions({
+      where: { username: username },
+    });
   }
 }
