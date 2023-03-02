@@ -21,4 +21,14 @@ export class WordsController {
   learn(@Body() word: SendWordDto): Promise<any> {
     return this.wordService.sendWord(word);
   }
+
+  @Post('start')
+  startGame(): Promise<any> {
+    return this.wordService.startGame();
+  }
+
+  @Get('find-all-game')
+  findAllGame(): Promise<any> {
+    return this.wordService.findAllGame();
+  }
 }

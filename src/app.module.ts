@@ -12,6 +12,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { UserEntity } from './users/entities/user.entity';
 import { ProfileEntity } from './users/entities/profile.entity';
+import { MongooseModule } from '@nestjs/mongoose';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -26,6 +27,9 @@ import { ProfileEntity } from './users/entities/profile.entity';
     WordsModule,
     AuthModule,
     UsersModule,
+    MongooseModule.forRoot(
+      'mongodb+srv://tamlong12032000:Tamlong1@game.7o9ulpa.mongodb.net/?retryWrites=true&w=majority',
+    ),
   ],
   controllers: [AppController],
   providers: [AppService],

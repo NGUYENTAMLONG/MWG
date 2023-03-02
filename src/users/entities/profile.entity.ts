@@ -11,7 +11,6 @@ export class ProfileEntity extends BaseEntity {
   last_name: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true, default: '' })
-  @Index({ unique: true })
   nickname: string;
 
   @Column({
@@ -23,7 +22,6 @@ export class ProfileEntity extends BaseEntity {
   gender: string;
 
   @Column({ type: 'varchar', length: 30, nullable: true, default: '' })
-  @Index({ unique: true })
   phone_number: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true, default: '' })
