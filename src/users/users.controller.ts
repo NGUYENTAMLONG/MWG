@@ -13,8 +13,8 @@ export class UsersController {
   }
 
   @Get('')
-  getList(): Promise<any> {
-    return this.userService.getUserList();
+  getList(@Query() queries:QueriesDto): Promise<any> {
+    return this.userService.getUserList(queries);
   }
 
   @Get('/get-by-username')

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Like, Repository, DataSource } from 'typeorm';
 import { uuid } from 'uuidv4';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserEntity } from './entities/user.entity';
@@ -21,9 +21,10 @@ export class UsersService {
     // private readonly profileRepository: Repository<ProfileEntity>,
     private readonly userRepository: UserRepository,
     private readonly profileRepository: ProfileRepository,
+    private readonly myDataSource: DataSource,
   ) {}
 
-  getUserList(query: QueryParamDto): Promise<any> {
+  async getUserList(query): Promise<any> {
     let condition = {};
     if (query.search) {
       condition = [
@@ -31,7 +32,7 @@ export class UsersService {
         { email: Like(`%${query.search}%`) },
       ];
     }
-    return this.userRepository.findAllByConditions(
+    return await this.userRepository.findAllByConditions(
       condition,
       query,
       {},
@@ -46,6 +47,14 @@ export class UsersService {
   }
 
   async createUser(payload: CreateUserDto): Promise<UserEntity> {
+    //    await this.myDataSource.transaction(async (transactionEntityManager)=>{
+    //     await transactionEntityManager.save();
+    //     await transactionEntityManager.save();
+    // ...
+    //    })
+    // const queryRunner = await this.myDataSource.createQueryRunner();
+    // await queryRunner.connect();
+
     try {
       const saltOrRounds = 10;
       const hashedPassword = await bcrypt.hash(payload.password, saltOrRounds);
@@ -64,7 +73,6 @@ export class UsersService {
       return error;
     }
   }
-
   async createProfile(payload) {}
 
   async uploadAvatar(payload) {}

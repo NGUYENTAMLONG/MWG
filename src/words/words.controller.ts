@@ -22,13 +22,13 @@ export class WordsController {
     return this.wordService.sendWord(word);
   }
 
-  @Post('start')
-  startGame(): Promise<any> {
-    return this.wordService.startGame();
-  }
+  // @Post('start')
+  // startGame(): Promise<any> {
+  //   return this.wordService.startGame();
+  // }
 
-  @Get('find-all-game')
-  findAllGame(): Promise<any> {
-    return this.wordService.findAllGame();
-  }
+  // @Get('find-all-game')
+  // findAllGame(): Promise<any> {
+  //   return this.wordService.findAllGame();
+  // }
 }

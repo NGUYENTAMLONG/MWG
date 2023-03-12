@@ -27,9 +27,9 @@ import { MongooseModule } from '@nestjs/mongoose';
     WordsModule,
     AuthModule,
     UsersModule,
-    MongooseModule.forRoot(
-      'mongodb+srv://tamlong12032000:Tamlong1@game.7o9ulpa.mongodb.net/?retryWrites=true&w=majority',
-    ),
+    // MongooseModule.forRoot(
+    //   'mongodb+srv://tamlong12032000:Tamlong1@cluster0.7o9ulpa.mongodb.net/?retryWrites=true&w=majority',
+    // ),
   ],
   controllers: [AppController],
   providers: [AppService],
