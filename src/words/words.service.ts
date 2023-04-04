@@ -21,7 +21,8 @@ export class WordsService {
   constructor(
     @InjectRepository(WordEntity)
     private readonly wordRepository: Repository<WordEntity>,
-    private http: HttpService, // @InjectModel(Game.name) private gameModel: Model<GameDocument>,
+    private http: HttpService,
+    @InjectModel(Game.name) private gameModel: Model<GameDocument>,
   ) {}
 
   private readonly usedWordsOfUser = [];
@@ -171,16 +172,16 @@ export class WordsService {
   }
 
   async startGame(): Promise<any> {
-    // try {
-    //   const createdGame = await this.gameModel.create({
-    //     owner: 'abc',
-    //   });
-    //   return createdGame;
-    // } catch (error) {
-    //   return error;
-    // }
+    try {
+      const createdGame = await this.gameModel.create({
+        owner: 'abc',
+      });
+      return createdGame;
+    } catch (error) {
+      return error;
+    }
   }
-  // async findAllGame(): Promise<Game[]> {
-  //   return this.gameModel.find().exec();
-  // }
+  async findAllGame(): Promise<Game[]> {
+    return this.gameModel.find().exec();
+  }
 }

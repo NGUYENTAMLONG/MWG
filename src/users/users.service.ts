@@ -7,7 +7,6 @@ import { UserEntity } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { ProfileEntity } from './entities/profile.entity';
 import { IAvatar } from './interfaces/avatar.interface';
-import { USER_SWAGGER_RESPONSE } from './users.constant';
 import { UserRepository } from './user.repository';
 import { QueryParamDto } from './dtos/query-param.dto';
 import { ProfileRepository } from './profile.repository';

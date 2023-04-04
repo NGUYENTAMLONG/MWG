@@ -10,7 +10,7 @@ import { WordsService } from './words.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([WordEntity]),
-    // MongooseModule.forFeature([{ name: Game.name, schema: GameSchema }]),
+    MongooseModule.forFeature([{ name: Game.name, schema: GameSchema }]),
     HttpModule,
   ],
   controllers: [WordsController],

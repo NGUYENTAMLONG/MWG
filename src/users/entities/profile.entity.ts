@@ -1,8 +1,9 @@
 import { BaseEntity } from 'src/database/base/entity.base';
 import { Entity, Column, Index, OneToOne, JoinColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
+import { PROFILE_CONST } from '../constants/profile.constant';
 
-@Entity()
+@Entity(PROFILE_CONST.MODEL_NAME)
 export class ProfileEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 50, nullable: true, default: '' })
   first_name: string;

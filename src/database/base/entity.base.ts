@@ -4,6 +4,7 @@ import {
   DeleteDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  Column,
 } from 'typeorm';
 
 export class BaseEntity extends TypeOrmBaseEntity {
@@ -18,4 +19,10 @@ export class BaseEntity extends TypeOrmBaseEntity {
 
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @Column({ nullable: true })
+  createdByUserId: string;
+
+  @Column({ nullable: true })
+  lastModifiedByUserId: string;
 }

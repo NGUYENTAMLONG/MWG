@@ -1,18 +1,30 @@
 import {
   BaseEntity,
+  DeepPartial,
+  DeleteResult,
   FindManyOptions,
   FindOneOptions,
+  FindOptionsWhere,
   Repository,
 } from 'typeorm';
 import { IPaginationParams } from './interfaces/pagination.interface';
 
 export class TypeOrmRepository<T extends BaseEntity> {
   public repository: Repository<T>;
+
   constructor(repository: Repository<T>) {
     this.repository = repository;
   }
 
+  create(data?: DeepPartial<T>): T {
+    return this.repository.create(data);
+  }
+
   save(data: any): Promise<T> {
+    return this.repository.save(data);
+  }
+
+  saveMultiple(data: T[]): Promise<T[]> {
     return this.repository.save(data);
   }
 
@@ -29,12 +41,19 @@ export class TypeOrmRepository<T extends BaseEntity> {
     return this.repository.softDelete(id);
   }
 
+  findOne(options: FindOneOptions<T>): Promise<T> {
+    return this.repository.findOne(options);
+  }
+
   async findExistedRecord() {
     return this.repository.find({
       take: 1,
     });
   }
 
+  findAll(options?: FindManyOptions<T>): Promise<T[]> {
+    return this.repository.find(options);
+  }
   async findAllByConditions(
     conditions: any,
     paginateParams: IPaginationParams,
@@ -83,5 +102,18 @@ export class TypeOrmRepository<T extends BaseEntity> {
   }
   async findOneByConditions(conditions: FindOneOptions): Promise<T> {
     return this.repository.findOne(conditions);
+  }
+
+  delete(
+    criteria:
+      | string
+      | number
+      | string[]
+      | Date
+      | number[]
+      | Date[]
+      | FindOptionsWhere<T>,
+  ): Promise<DeleteResult> {
+    return this.repository.delete(criteria);
   }
 }
