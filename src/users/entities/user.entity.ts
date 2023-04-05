@@ -1,8 +1,17 @@
 import { BaseEntity } from 'src/database/base/entity.base';
-import { Entity, Column, Index, OneToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  Index,
+  OneToOne,
+  JoinColumn,
+  ManyToMany,
+} from 'typeorm';
 import { ProfileEntity } from './profile.entity';
+import { RoleEntity } from '../../../src/roles/entities/role.entity';
+import { USER_CONST } from '../constants/user.constant';
 
-@Entity()
+@Entity(USER_CONST.MODEL_NAME)
 export class UserEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 30, nullable: false })
   @Index({ unique: true })
@@ -25,4 +34,13 @@ export class UserEntity extends BaseEntity {
     default: '/avatars/avatar-default.jpg',
   })
   avatar: string;
+
+  @Column({ default: false })
+  isSuperAdmin: boolean;
+
+  @Column({ default: true })
+  isActive: boolean;
+
+  @ManyToMany(() => RoleEntity, (role) => role.users)
+  roles: RoleEntity[];
 }

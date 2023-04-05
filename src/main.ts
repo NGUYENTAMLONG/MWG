@@ -10,6 +10,9 @@ async function bootstrap() {
     .setDescription('The description of API')
     .setVersion('1.0')
     .addBearerAuth()
+    .setContact('tamlongnguyen', '/api-docs', 'tamlong12032000@gmail.com')
+    .addApiKey({ type: 'apiKey', in: 'header', name: 'some' }, 'some')
+    .setLicense('LICENSED-MIT', 'https://choosealicense.com/licenses/mit/')
     .build();
 
   app.useGlobalPipes(new ValidationPipe());

@@ -1,26 +1,59 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository, DataSource } from 'typeorm';
 import { uuid } from 'uuidv4';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { ProfileEntity } from './entities/profile.entity';
+import { IAvatar } from './interfaces/avatar.interface';
+import { UserRepository } from './user.repository';
+import { QueryParamDto } from './dtos/query-param.dto';
+import { ProfileRepository } from './profile.repository';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(ProfileEntity)
-    private readonly profileRepository: Repository<ProfileEntity>,
+    // @InjectRepository(UserEntity)
+    // private readonly userRepository: Repository<UserEntity>,
+    // @InjectRepository(ProfileEntity)
+    // private readonly profileRepository: Repository<ProfileEntity>,
+    private readonly userRepository: UserRepository,
+    private readonly profileRepository: ProfileRepository,
+    private readonly myDataSource: DataSource,
   ) {}
 
-  getUserList(): Promise<UserEntity[]> {
-    return this.userRepository.find();
+  async getUserList(query): Promise<any> {
+    let condition = {};
+    if (query.search) {
+      condition = [
+        { username: Like(`%${query.search}%`) },
+        { email: Like(`%${query.search}%`) },
+      ];
+    }
+    return await this.userRepository.findAllByConditions(
+      condition,
+      query,
+      {},
+      {
+        uId: true,
+        username: true,
+        password: false,
+        email: true,
+        avatar: false,
+      },
+    );
   }
 
   async createUser(payload: CreateUserDto): Promise<UserEntity> {
+    //    await this.myDataSource.transaction(async (transactionEntityManager)=>{
+    //     await transactionEntityManager.save();
+    //     await transactionEntityManager.save();
+    // ...
+    //    })
+    // const queryRunner = await this.myDataSource.createQueryRunner();
+    // await queryRunner.connect();
+
     try {
       const saltOrRounds = 10;
       const hashedPassword = await bcrypt.hash(payload.password, saltOrRounds);
@@ -35,22 +68,22 @@ export class UsersService {
       });
       return savedUser;
     } catch (error) {
+      console.log(error);
       return error;
     }
   }
-
   async createProfile(payload) {}
 
   async uploadAvatar(payload) {}
 
   async findOneById(userId: number): Promise<UserEntity> {
-    return await this.userRepository.findOne({
+    return await this.userRepository.findOneByConditions({
       where: { id: userId },
     });
   }
 
   async findOneByUsername(username: string): Promise<UserEntity> {
-    return await this.userRepository.findOne({
+    return await this.userRepository.findOneByConditions({
       where: { username: username },
     });
   }

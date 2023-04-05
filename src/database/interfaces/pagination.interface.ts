@@ -32,7 +32,9 @@ export interface IPaginationParams {
    * @description sort order param asc | desc
    * @example asc
    */
-  sortOrder?: 'asc' | 'desc';
+  // sortOrder?: 'asc' | 'desc';
+  sortOrder?: string;
+
   /**
    * @field sortBy
    * @type string

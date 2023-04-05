@@ -13,12 +13,16 @@ import { HttpService } from '@nestjs/axios';
 import { ILearnWord } from './interfaces/word.interface';
 import { WORD_SWAGGER_RESPONSE } from './words.constant';
 import * as lodash from 'lodash';
+import { InjectModel } from '@nestjs/mongoose';
+import { Game, GameDocument } from './schemas/game.schema';
+import { Model } from 'mongoose';
 @Injectable()
 export class WordsService {
   constructor(
     @InjectRepository(WordEntity)
     private readonly wordRepository: Repository<WordEntity>,
     private http: HttpService,
+    @InjectModel(Game.name) private gameModel: Model<GameDocument>,
   ) {}
 
   private readonly usedWordsOfUser = [];
@@ -165,5 +169,19 @@ export class WordsService {
         );
       }
     }
+  }
+
+  async startGame(): Promise<any> {
+    try {
+      const createdGame = await this.gameModel.create({
+        owner: 'abc',
+      });
+      return createdGame;
+    } catch (error) {
+      return error;
+    }
+  }
+  async findAllGame(): Promise<Game[]> {
+    return this.gameModel.find().exec();
   }
 }

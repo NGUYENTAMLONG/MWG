@@ -12,6 +12,12 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { UserEntity } from './users/entities/user.entity';
 import { ProfileEntity } from './users/entities/profile.entity';
+import { MongooseModule } from '@nestjs/mongoose';
+import { RolesModule } from './roles/roles.module';
+import { RoleEntity } from './roles/entities/role.entity';
+import { PermissionsModule } from './permissions/permissions.module';
+import { PermissionEntity } from './permissions/entities/permission.entity';
+import { TeachersModule } from './teachers/teachers.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -20,14 +26,27 @@ import { ProfileEntity } from './users/entities/profile.entity';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'mwg',
-      entities: [WordEntity, UserEntity, ProfileEntity],
+      entities: [
+        WordEntity,
+        UserEntity,
+        ProfileEntity,
+        RoleEntity,
+        PermissionEntity,
+      ],
       synchronize: true,
     }),
+    MongooseModule.forRoot(
+      'mongodb+srv://tamlong12032000:PziKHF2heASbu7Xd@cluster0.7o9ulpa.mongodb.net/?retryWrites=true&w=majority',
+    ),
     WordsModule,
     AuthModule,
     UsersModule,
+    RolesModule,
+    PermissionsModule,
+    TeachersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
+// PziKHF2heASbu7Xd;
