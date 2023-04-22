@@ -12,12 +12,11 @@ import {
 import { TEACHER_CONST } from '../constants/teacher.constant';
 
 @Entity(TEACHER_CONST.MODEL_NAME)
-export class RoleEntity extends BaseEntity {
+export class TeacherEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 30, nullable: false })
   @Index({ unique: true })
   tId: string;
 
   @Column({ type: 'varchar', length: 100, nullable: false })
-  @Index({ unique: true })
   name: string;
 }

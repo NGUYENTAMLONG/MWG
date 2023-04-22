@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { AddWordDto } from './dtos/add-word.dto';
 import { SendWordDto } from './dtos/send-word.dto';
 import { WordsService } from './words.service';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('words')
+@ApiTags('words')
+@Controller({ version: ['1'], path: 'words' })
 export class WordsController {
   constructor(private readonly wordService: WordsService) {}
 
