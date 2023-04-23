@@ -25,23 +25,25 @@ export class UsersService {
 
   async getUserList(query): Promise<any> {
     let condition = {};
+    console.log(query);
     if (query.search) {
       condition = [
         { username: Like(`%${query.search}%`) },
         { email: Like(`%${query.search}%`) },
       ];
     }
-    return await this.userRepository.findAllByConditions(
+    console.log({ condition });
+    return this.userRepository.findAllByConditions(
       condition,
       query,
       {},
-      {
-        uId: true,
-        username: true,
-        password: false,
-        email: true,
-        avatar: false,
-      },
+      // {
+      //   uId: true,
+      //   username: true,
+      //   password: false,
+      //   email: true,
+      //   avatar: true,
+      // },
     );
   }
 

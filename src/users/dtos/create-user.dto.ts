@@ -1,30 +1,44 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import {
+  IsArray,
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
-  MaxLength,
-  MinLength,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class CreateUserRoleDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(100)
-  @MinLength(1)
+  id: string;
+}
+
+export class BaseUserDto {
+  @ApiProperty({ description: 'uid', example: 'u01' })
+  @IsString()
+  @IsNotEmpty()
+  uid: string;
+
+  @ApiProperty({ description: 'username', example: 'username01' })
+  @IsString()
+  @IsNotEmpty()
   username: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(30)
-  @MinLength(8)
-  password: string;
-
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({ description: 'email', example: 'user01@gmail.com' })
   @IsEmail()
   @IsNotEmpty()
   email: string;
+
+  @ApiProperty({ description: 'password', example: 'password123' })
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+
+  @ApiProperty({ description: 'password', example: 'password123' })
+  @IsString()
+  @IsNotEmpty()
+  confirmPassword: string;
 }
+export class CreateUserDto extends BaseUserDto {}
+export class UpdateUserDto extends BaseUserDto {}

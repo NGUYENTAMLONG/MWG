@@ -12,8 +12,8 @@ export const EXCEPTION_PROFILE = {
     message: 'PROFILE EXISTED',
     code: 'prof002',
   },
-  SID_EXISTED: {
-    message: 'SID EXISTED',
+  PID_EXISTED: {
+    message: 'PID EXISTED',
     code: 'prof003',
   },
 };
