@@ -1,9 +1,10 @@
 import { BaseEntity } from 'src/database/base/entity.base';
-import { Entity, Column, Index, ManyToOne } from 'typeorm';
+import { Entity, Column, Index, ManyToOne, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { EXAM_CONST } from '../constants/exam.constant';
 import { TopicEntity } from 'src/topics/entities/topic.entity';
 import { LevelEntity } from 'src/levels/entities/level.entity';
+import { FeedbackEntity } from 'src/feedbacks/entities/feedback.entity';
 
 @Entity(EXAM_CONST.MODEL_NAME)
 export class ExamEntity extends BaseEntity {
@@ -38,4 +39,7 @@ export class ExamEntity extends BaseEntity {
   @ManyToOne(() => LevelEntity, (level) => level.exams)
   @ApiProperty()
   level: LevelEntity;
+
+  @OneToMany(() => FeedbackEntity, (feedback) => feedback.exam)
+  feedbacks: FeedbackEntity[];
 }

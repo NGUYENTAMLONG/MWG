@@ -8,10 +8,16 @@ import {
   NotFoundEntity,
   UnauthorizedEntity,
 } from './common/constants/app/app.object';
-import { UserEntity } from './users/entities/user.entity';
+import { resolve } from 'path';
+import { join } from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import * as hbs from 'express-handlebars';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  // app.enableCors({
+  //   origin: [],
+  // });
   const config = new DocumentBuilder()
     .setTitle('Nest API')
     .setDescription('The description of API')
@@ -32,6 +38,12 @@ async function bootstrap() {
     ],
   });
   SwaggerModule.setup('/api-docs', app, document);
+  // app.useStaticAssets(join(__dirname, '..', './src/public'));
+  // app.setBaseViewsDir(join(__dirname, '..', './src/views'));
+  // app.engine('hbs', hbs.engine({ extname: 'hbs' }));
+  app.useStaticAssets(resolve('./src/public'));
+  app.setBaseViewsDir(resolve('./views'));
+  app.setViewEngine('ejs');
   await app.listen(3000);
 }
 bootstrap();

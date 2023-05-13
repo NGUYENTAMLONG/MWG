@@ -1,8 +1,9 @@
 import { BaseEntity } from 'src/database/base/entity.base';
 import { PermissionEntity } from 'src/permissions/entities/permission.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { Entity, Column, Index } from 'typeorm';
+import { Entity, Column, Index, ManyToMany, JoinTable } from 'typeorm';
 import { SUBJECT_CONST } from '../constants/subject.constant';
+import { LevelEntity } from 'src/levels/entities/level.entity';
 
 @Entity(SUBJECT_CONST.MODEL_NAME)
 export class SubjectEntity extends BaseEntity {
@@ -18,4 +19,8 @@ export class SubjectEntity extends BaseEntity {
 
   @Column('simple-json', { nullable: true })
   metadata: object;
+
+  @ManyToMany(() => LevelEntity)
+  @JoinTable()
+  levels: LevelEntity[];
 }

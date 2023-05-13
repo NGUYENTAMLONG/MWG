@@ -1,9 +1,20 @@
-import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { QueryByUsernameDto, UserIdParamDto } from './dtos/params.dto';
 import { UsersService } from './users.service';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiExtraModels,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
@@ -24,13 +35,29 @@ import {
   UnauthorizedEntity,
 } from 'src/common/constants/app/app.object';
 import { QueryParamDto } from './dtos/query-param.dto';
+import { Auth } from 'src/auth/auth.decorator';
+import { PermissionType } from 'src/permissions/constants/permission.constant';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('users')
 @Controller({ version: ['1'], path: 'users' })
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Post('')
+  @Auth(PermissionType.CREATE_USER)
+  @ApiOperation({ summary: 'Admin Creates User' })
+  @ApiConsumes('application/json', 'multipart/form-data')
+  @ApiBody({
+    description: 'Data create infor user',
+    type: CreateUserDto,
+  })
+  @ApiOkResponse(swaggerSchemaRef(UserDetailResponseSchema))
+  @ApiBadRequestResponse(swaggerSchemaRef(BadRequestEntity))
+  @ApiUnauthorizedResponse(swaggerSchemaRef(UnauthorizedEntity))
+  @ApiInternalServerErrorResponse(swaggerSchemaRef(InternalServerErrorEntity))
   createUser(@Body() payload: CreateUserDto): Promise<any> {
     return this.userService.createUser(payload);
   }

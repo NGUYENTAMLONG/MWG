@@ -41,6 +41,12 @@ export class TypeOrmRepository<T extends BaseEntity> {
     return this.repository.softDelete(id);
   }
 
+  restore(
+    id: string | number | string[] | Date | number[] | Date[],
+  ): Promise<any> {
+    return this.repository.restore(id);
+  }
+
   findOne(options: FindOneOptions<T>): Promise<T> {
     return this.repository.findOne(options);
   }
@@ -73,6 +79,7 @@ export class TypeOrmRepository<T extends BaseEntity> {
       take: pageSize,
       skip: (page - 1) * pageSize,
       where: conditions,
+      relations: join,
     };
     if (join) {
       paramsFinds.relations = join;
@@ -86,8 +93,14 @@ export class TypeOrmRepository<T extends BaseEntity> {
           paginateParams.sortOrder == 'desc' ? 'DESC' : 'ASC',
       };
     }
-    const [result, total] = await this.repository.findAndCount(paramsFinds);
 
+    const [result, total] = await this.repository.findAndCount({
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+      where: conditions,
+      relations: join,
+      select: select,
+    });
     const totalPage =
       total % pageSize == 0
         ? total / pageSize

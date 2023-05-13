@@ -30,6 +30,11 @@ import { TopicEntity } from './topics/entities/topic.entity';
 import { ExamEntity } from './exams/entities/exam.entity';
 import { LevelEntity } from './levels/entities/level.entity';
 import { SubjectEntity } from './subjects/enitities/subject.entity';
+import { FeedbackEntity } from './feedbacks/entities/feedback.entity';
+import { FeedbacksModule } from './feedbacks/feedbacks.module';
+import { AuthorizationGuard } from './auth/authorization.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { AttachmentEntity } from './questions/entities/attachment.entity';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -50,15 +55,17 @@ import { SubjectEntity } from './subjects/enitities/subject.entity';
         ExamEntity,
         LevelEntity,
         SubjectEntity,
+        FeedbackEntity,
+        AttachmentEntity,
       ],
       synchronize: true,
     }),
-    MongooseModule.forRoot(
-      'mongodb+srv://tamlong12032000:PziKHF2heASbu7Xd@cluster0.7o9ulpa.mongodb.net/?retryWrites=true&w=majority',
-    ),
+    // MongooseModule.forRoot(
+    //   'mongodb+srv://tamlong12032000:PziKHF2heASbu7Xd@cluster0.7o9ulpa.mongodb.net/?retryWrites=true&w=majority',
+    // ),
     AuthModule,
-    WordsModule,
     UsersModule,
+    // WordsModule,
     RolesModule,
     PermissionsModule,
     TeachersModule,
@@ -68,9 +75,15 @@ import { SubjectEntity } from './subjects/enitities/subject.entity';
     ExamsModule,
     LevelsModule,
     SubjectsModule,
+    FeedbacksModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthorizationGuard,
+    },
+  ],
 })
 export class AppModule {}
-// PziKHF2heASbu7Xd;
