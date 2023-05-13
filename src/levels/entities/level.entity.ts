@@ -7,13 +7,16 @@ import { ExamEntity } from 'src/exams/entities/exam.entity';
 export class LevelEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 30, nullable: false })
   @Index({ unique: true })
-  aId: string;
+  lId: string;
 
   @Column({ type: 'varchar', nullable: false })
-  content: string;
+  title: string;
 
-  @Column({ type: 'varchar', nullable: false })
-  correct: string;
+  @Column({ type: 'varchar', nullable: true })
+  description: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  note: string;
 
   @Column('simple-json', { nullable: true })
   metadata: object;

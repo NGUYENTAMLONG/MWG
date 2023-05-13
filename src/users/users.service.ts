@@ -32,7 +32,7 @@ export class UsersService {
         { email: Like(`%${query.search}%`) },
       ];
     }
-    console.log({ condition });
+
     return this.userRepository.findAllByConditions(
       condition,
       query,
@@ -70,7 +70,7 @@ export class UsersService {
       });
       return savedUser;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return error;
     }
   }
@@ -79,14 +79,26 @@ export class UsersService {
   async uploadAvatar(payload) {}
 
   async findOneById(userId: number): Promise<UserEntity> {
-    return await this.userRepository.findOneByConditions({
+    return this.userRepository.findOneByConditions({
       where: { id: userId },
     });
   }
 
   async findOneByUsername(username: string): Promise<UserEntity> {
-    return await this.userRepository.findOneByConditions({
+    return this.userRepository.findOneByConditions({
       where: { username: username },
+    });
+  }
+  async findOneByEmail(email: string): Promise<UserEntity> {
+    return this.userRepository.findOneByConditions({
+      where: { email: email },
+    });
+  }
+
+  public async accessPermission(userId: number): Promise<UserEntity> {
+    return this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['roles', 'roles.permissions'],
     });
   }
 }

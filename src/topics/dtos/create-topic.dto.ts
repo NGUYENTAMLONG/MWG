@@ -1,11 +1,11 @@
-import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class BaseTopicDto {
-  @ApiProperty({ description: 'tid', example: 't01' })
-  @IsString()
-  @IsNotEmpty()
-  tid: string;
+  // @ApiProperty({ description: 'tid', example: 't01' })
+  // @IsString()
+  // @IsNotEmpty()
+  // tId: string;
 
   @ApiProperty({ description: 'topic name', example: 'family' })
   @IsString()
@@ -15,15 +15,15 @@ export class BaseTopicDto {
   @ApiProperty({ description: 'topic name', example: 'family' })
   @IsString()
   @IsNotEmpty()
-  desc: string;
+  description: string;
 
-  @ApiPropertyOptional({
-    description: 'topic thumbnail',
-    example: '/public/images/thumbnail-default.jpg',
-  })
-  @IsString()
-  @IsNotEmpty()
-  thumbnail: string;
+  // @ApiPropertyOptional({
+  //   description: 'topic thumbnail',
+  //   example: '/public/images/thumbnail-default.jpg',
+  // })
+  // @IsString()
+  // @IsNotEmpty()
+  // thumbnail: string;
 }
 export class CreateTopicDto extends BaseTopicDto {}
 export class UpdateTopicDto extends BaseTopicDto {}
