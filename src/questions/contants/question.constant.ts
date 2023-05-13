@@ -3,6 +3,15 @@ export const QUESTION_CONST = {
   MODEL_PROVIDER: 'QUESTION_MODEL',
 };
 
+export const ATTACHMENT_CONST = {
+  MODEL_NAME: 'attachment',
+  MODEL_PROVIDER: 'ATTACHMMENT_MODEL',
+};
+export const ATTACHMENT_TYPE = {
+  IMAGE: 'image',
+  AUDIO: 'audio',
+  VIDEO: 'video',
+};
 export const EXCEPTION_QUESTION = {
   QUESTION_NOT_FOUND: {
     message: 'QUESTION NOT FOUND',

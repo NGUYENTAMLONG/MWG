@@ -12,8 +12,8 @@ export class AnswerEntity extends BaseEntity {
   @Column({ type: 'varchar', nullable: false })
   content: string;
 
-  @Column({ type: 'varchar', nullable: false })
-  correct: string;
+  @Column({ type: 'boolean', nullable: false })
+  correct: boolean;
 
   @Column('simple-json', { nullable: true })
   metadata: object;

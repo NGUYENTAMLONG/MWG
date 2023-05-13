@@ -12,14 +12,35 @@ export class AuthService {
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
-  async validateUser(username: string, password: string): Promise<UserEntity> {
+  async validateUserByUsername(
+    username: string,
+    password: string,
+  ): Promise<UserEntity> {
     const user = await this.userService.findOneByUsername(username);
     if (!user) {
       throw new BadRequestException('User not found, disabled or locked');
     }
+    return this.compareAccount(password, user);
+  }
+
+  async validateUserByEmail(
+    email: string,
+    password: string,
+  ): Promise<UserEntity> {
+    const user = await this.userService.findOneByEmail(email);
+    if (!user) {
+      throw new BadRequestException('User not found, disabled or locked');
+    }
+    return this.compareAccount(user.password, user);
+  }
+
+  async compareAccount(
+    password: string,
+    user: UserEntity,
+  ): Promise<UserEntity | null> {
     const comparePassword = await bcrypt.compare(password, user.password);
 
-    if (user && comparePassword) {
+    if (comparePassword) {
       return user;
     }
     return null;
@@ -29,10 +50,41 @@ export class AuthService {
     const payload: JwtPayload = {
       sub: user.id,
       email: user.email,
+      isAdministrator: user.isSuperAdmin,
     };
 
     return {
       accessToken: this.jwtService.sign(payload),
     };
+  }
+
+  private encode(user: UserEntity) {
+    const access_token = this.generateToken(user);
+
+    return {
+      access_token,
+      id: user.id,
+      email: user.email,
+    };
+  }
+
+  private generateToken(user: UserEntity) {
+    const payload: JwtPayload = {
+      sub: user.id,
+      email: user.email,
+      isAdministrator: user.isSuperAdmin,
+    };
+    return this.jwtService.sign(payload, {
+      expiresIn: process.env.TOKEN_EXPIRED_IN,
+    });
+  }
+
+  public decode(token: string) {
+    try {
+      const jwt = token.replace('Bearer ', '');
+      return this.jwtService.decode(jwt, { json: true }) as JwtPayload;
+    } catch (e) {
+      return null;
+    }
   }
 }

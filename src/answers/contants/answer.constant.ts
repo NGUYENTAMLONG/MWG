@@ -16,4 +16,12 @@ export const EXCEPTION_ANSWER = {
     message: 'AID EXISTED',
     code: 'answer003',
   },
+  NOT_FOUND_QUESTION_FOR_ANSWER: {
+    message: 'NOT FOUND QUESTION FOR ANSWER',
+    code: 'answer004',
+  },
+  DUPLICATE_CORRECT_ANSWER: {
+    message: 'DUPLICATE CORRECT ANSWER',
+    code: 'answer005',
+  },
 };
