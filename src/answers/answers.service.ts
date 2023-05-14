@@ -7,7 +7,7 @@ import { AnswerRepository } from './answer.repository';
 import { DataSource, Like } from 'typeorm';
 import { CreateOneAnswerDto } from './dtos/create-answer.dto';
 import { AnswerEntity } from './entities/answer.entity';
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 import { QuestionsService } from 'src/questions/questions.service';
 import { EXCEPTION_ANSWER } from './contants/answer.constant';
 import { UpdateOneAnswerDto } from './dtos/update-answer.dto';
@@ -73,7 +73,7 @@ export class AnswersService {
         }
       }
       const newAnswer = {
-        aId: 'aId-' + uuid(),
+        aId: 'aId-' + v4(),
         content,
         correct,
         metadata,

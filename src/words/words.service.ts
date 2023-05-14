@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import { uuid } from 'uuidv4';
 import { AddWordDto } from './dtos/add-word.dto';
 import { SendWordDto } from './dtos/send-word.dto';
 import { WordEntity } from './entities/word.entity';
@@ -16,6 +15,7 @@ import * as lodash from 'lodash';
 import { InjectModel } from '@nestjs/mongoose';
 import { Game, GameDocument } from './schemas/game.schema';
 import { Model } from 'mongoose';
+import { v4 } from 'uuid';
 @Injectable()
 export class WordsService {
   constructor(
@@ -34,7 +34,7 @@ export class WordsService {
   async addWord(payload: AddWordDto): Promise<WordEntity> {
     try {
       const newWord = {
-        wId: 'wId-' + uuid(),
+        wId: 'wId-' + v4(),
         ...payload,
       };
       const addedWord = await this.wordRepository.save(newWord);
@@ -81,7 +81,7 @@ export class WordsService {
             (elm, i) => elm.hasOwnProperty('text') && elm.text !== '',
           );
           newWord = {
-            wId: 'wId-' + uuid(),
+            wId: 'wId-' + v4(),
             word: wordData.word,
             part_of_speech: priorityWord.partOfSpeech,
             example:
@@ -92,7 +92,7 @@ export class WordsService {
           };
         } else {
           newWord = {
-            wId: 'wId-' + uuid(),
+            wId: 'wId-' + v4(),
             word: foundNewWord.word,
             part_of_speech: foundNewWord.partOfSpeech,
             example: foundNewWord.exampleUses[0].text,
