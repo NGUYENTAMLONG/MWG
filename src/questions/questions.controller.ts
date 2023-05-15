@@ -91,4 +91,27 @@ export class QuestionsController {
   restoreOne(@Param('id') id: string): Promise<any> {
     return this.questionService.restoreOneQuestion(Number(id));
   }
+
+  @Delete('/attachment/:type/remove/:id')
+  // @Auth(PermissionType.CREATE_USER)
+  @ApiOperation({ summary: 'Admin/User SoftDelete one attachment' })
+  softDeleteAttachment(
+    @Param('type') type: string,
+    @Param('id') id: string,
+  ): Promise<any> {
+    return this.questionService.softDeleteAttachmentOfQuestion(
+      type,
+      Number(id),
+    );
+  }
+
+  @Patch('attachment/:type/restore/:id')
+  // @Auth(PermissionType.CREATE_USER)
+  @ApiOperation({ summary: 'Admin/User Restores one attachment' })
+  restoreAttachment(
+    @Param('type') type: string,
+    @Param('id') id: string,
+  ): Promise<any> {
+    return this.questionService.restoreAttachmentOfQuestion(type, Number(id));
+  }
 }

@@ -1,7 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { AttachmentRepository } from './attachment.repository';
 import { QuestionEntity } from './entities/question.entity';
-import { Like } from 'typeorm';
+import { IsNull, Like, Not } from 'typeorm';
 import { v4 } from 'uuid';
 import { CreateQuestionDto } from './dtos/create-question.dto';
 import {
@@ -264,6 +268,77 @@ export class QuestionsService {
   public async restoreOneQuestion(questionId: number): Promise<any> {
     try {
       const resultRestore = await this.questionRepository.restore(questionId);
+      if (resultRestore.affected) {
+        return {
+          success: true,
+        };
+      }
+      return {
+        success: false,
+      };
+    } catch (error) {
+      return error;
+    }
+  }
+
+  public async softDeleteAttachmentOfQuestion(
+    type: string,
+    attachmentId: number,
+  ): Promise<any> {
+    try {
+      if (!Object.values(ATTACHMENT_TYPE).includes(type)) {
+        throw new BadRequestException(
+          EXCEPTION_QUESTION.ATTACHMENT_INVALID_TYPE,
+        );
+      }
+      const foundAttachment = await this.attachmentRepository.findOne({
+        where: {
+          id: attachmentId,
+          type,
+        },
+      });
+      if (!foundAttachment) {
+        throw new BadRequestException(EXCEPTION_QUESTION.ATTACHMENT_NOT_FOUND);
+      }
+      const resultSoftDelete = await this.attachmentRepository.softDelete(
+        foundAttachment.id,
+      );
+      if (resultSoftDelete.affected) {
+        return {
+          success: true,
+        };
+      }
+      return {
+        success: false,
+      };
+    } catch (error) {
+      return error;
+    }
+  }
+  public async restoreAttachmentOfQuestion(
+    type: string,
+    attachmentId: number,
+  ): Promise<any> {
+    try {
+      if (!Object.values(ATTACHMENT_TYPE).includes(type)) {
+        throw new BadRequestException(
+          EXCEPTION_QUESTION.ATTACHMENT_INVALID_TYPE,
+        );
+      }
+      const foundAttachmentDeleted =
+        await this.attachmentRepository.findOneDeleted({
+          where: {
+            id: attachmentId,
+            type,
+            deleted_at: Not(IsNull()),
+          },
+        });
+      if (!foundAttachmentDeleted) {
+        throw new BadRequestException(EXCEPTION_QUESTION.ATTACHMENT_NOT_FOUND);
+      }
+      const resultRestore = await this.attachmentRepository.restore(
+        foundAttachmentDeleted.id,
+      );
       if (resultRestore.affected) {
         return {
           success: true,
