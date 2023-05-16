@@ -11,7 +11,7 @@ import {
 import { resolve } from 'path';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import * as hbs from 'express-handlebars';
+// import * as hbs from 'express-handlebars';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
