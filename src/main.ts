@@ -12,6 +12,8 @@ import { resolve } from 'path';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as hbs from 'express-handlebars';
+import * as express from 'express';
+import * as path from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -29,6 +31,7 @@ async function bootstrap() {
     .build();
 
   app.useGlobalPipes(new ValidationPipe());
+
   const document = SwaggerModule.createDocument(app, config, {
     extraModels: [
       BadRequestEntity,
@@ -37,13 +40,24 @@ async function bootstrap() {
       UnauthorizedEntity,
     ],
   });
-  SwaggerModule.setup('/api-docs', app, document);
+
+  // Serve Swagger UI with customizations
+  const swaggerOptions = {
+    // customCss: '.swagger-ui .topbar { display: none }', // Hide the top bar
+    customJs: '/static/swagger-custom.js', // Use the custom JavaScript code
+  };
+  SwaggerModule.setup('/api-docs', app, document, swaggerOptions);
   // app.useStaticAssets(join(__dirname, '..', './src/public'));
   // app.setBaseViewsDir(join(__dirname, '..', './src/views'));
   // app.engine('hbs', hbs.engine({ extname: 'hbs' }));
+
   app.useStaticAssets(resolve('./src/public'));
   app.setBaseViewsDir(resolve('./views'));
   app.setViewEngine('ejs');
+  app.use(
+    '/static',
+    express.static(path.join(__dirname, '../..', 'src/static')),
+  );
   await app.listen(3000);
 }
 bootstrap();

@@ -52,4 +52,8 @@ export class UserEntity extends BaseEntity {
   @ManyToMany(() => RoleEntity, (role) => role.users)
   @ApiProperty()
   roles: RoleEntity[];
+
+  @OneToOne(() => ProfileEntity, (profile) => profile.user, { cascade: true })
+  @JoinColumn()
+  profile: ProfileEntity;
 }

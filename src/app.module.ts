@@ -35,6 +35,7 @@ import { FeedbacksModule } from './feedbacks/feedbacks.module';
 import { AuthorizationGuard } from './auth/authorization.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { AttachmentEntity } from './questions/entities/attachment.entity';
+import { TeacherEntity } from './teachers/enitities/teacher.entity';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -46,6 +47,7 @@ import { AttachmentEntity } from './questions/entities/attachment.entity';
       entities: [
         WordEntity,
         UserEntity,
+        TeacherEntity,
         ProfileEntity,
         RoleEntity,
         PermissionEntity,

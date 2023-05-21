@@ -32,6 +32,10 @@ export const EXCEPTION_USER = {
     message: 'UID EXISTED',
     code: 'user004',
   },
+  PASSWORD_DOES_NOT_MATCH: {
+    message: 'PASSWORD DOES NOT MATCH',
+    code: 'user005',
+  },
 };
 
 export const USER_SWAGGER_RESPONSE = {

@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import {
   IsArray,
   IsEmail,
+  IsJSON,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -15,11 +16,6 @@ export class CreateUserRoleDto {
 }
 
 export class BaseUserDto {
-  @ApiProperty({ description: 'uid', example: 'u01' })
-  @IsString()
-  @IsNotEmpty()
-  uid: string;
-
   @ApiProperty({ description: 'username', example: 'username01' })
   @IsString()
   @IsNotEmpty()
@@ -39,6 +35,13 @@ export class BaseUserDto {
   @IsString()
   @IsNotEmpty()
   confirmPassword: string;
+
+  @ApiPropertyOptional({
+    description: 'metadata',
+    // example: 'Metadata for the question',
+  })
+  @IsJSON()
+  metadata: JSON;
 }
 export class CreateUserDto extends BaseUserDto {}
 export class UpdateUserDto extends BaseUserDto {}
