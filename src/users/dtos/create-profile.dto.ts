@@ -1,45 +1,60 @@
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEnum, IsNumber, IsPhoneNumber, IsString } from 'class-validator';
+import { Gender, Scope } from '../constants/profile.constant';
 
 export class CreateProfileDto {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'User Id',
+  })
+  @IsNumber()
+  userId: number;
+
+  @ApiPropertyOptional({
+    description: 'First name',
+  })
   @IsString()
-  @IsNotEmpty()
   first_name: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional({
+    description: 'Last name',
+  })
   @IsString()
-  @IsNotEmpty()
   last_name: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional({
+    description: 'Nick name',
+  })
   @IsString()
-  @IsNotEmpty()
   nickname: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  gender: string;
+  @ApiPropertyOptional({
+    description: 'Gender',
+  })
+  @IsEnum(Gender)
+  gender: Gender;
 
-  @ApiProperty()
+  @ApiPropertyOptional({
+    description: 'Phonenumber',
+  })
   @IsString()
-  @IsNotEmpty()
+  @IsPhoneNumber()
   phone_number: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional({
+    description: 'Address',
+    isArray: true,
+  })
   @IsString()
-  @IsNotEmpty()
   address: string;
 
-  @ApiProperty()
-  @IsArray()
-  scope: string;
+  @ApiPropertyOptional({
+    description: 'Scope private',
+    enum: [Object.values(Scope)],
+  })
+  @IsEnum(Scope)
+  scope: Scope[];
+
+  // @ApiPropertyOptional({
+  //   description: 'User Relation',
+  // })
 }

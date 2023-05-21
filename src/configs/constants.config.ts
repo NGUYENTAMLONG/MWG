@@ -20,10 +20,11 @@ export const DATABASE_CONFIG = {
   DATABASE: process.env.DB_NAME,
 };
 
-export const DEFAULT_ADMIN_USER = {
-  uid: process.env.DEFAULT_ADMIN_ID || 'u01',
+export const DEFAULT_SUPERADMIN = {
   email: process.env.DEFAULT_ADMIN_EMAIL || 'admin@gmail.com',
+  username: process.env.DEFAULT_ADMIN_USERNAME || 'usernameadmin',
   password: process.env.DEFAULT_ADMIN_PASSWORD || 'admin123456',
+  createBy: process.env.DEFAULT_ADMIN_CREATE_BY || 'system',
 };
 
 export const REDIS_CONFIG = {

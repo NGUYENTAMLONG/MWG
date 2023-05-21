@@ -25,4 +25,12 @@ export const EXCEPTION_QUESTION = {
     message: 'QID EXISTED',
     code: 'question003',
   },
+  ATTACHMENT_NOT_FOUND: {
+    message: 'ATTACHMENT NOT FOUND',
+    code: 'question004',
+  },
+  ATTACHMENT_INVALID_TYPE: {
+    message: 'ATTACHMENT INVALID TYPE',
+    code: 'question005',
+  },
 };

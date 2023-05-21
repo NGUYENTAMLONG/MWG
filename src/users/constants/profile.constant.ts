@@ -3,6 +3,21 @@ export const PROFILE_CONST = {
   MODEL_PROVIDER: 'PROFILE_MODEL',
 };
 
+export enum Gender {
+  MALE = 'male',
+  FEMALE = 'female',
+  OTHER = 'other',
+}
+
+export enum Scope {
+  FIRSTNAME = 'first_name',
+  LASTNAME = 'last_name',
+  NICKNAME = 'nickname',
+  GENDER = 'gender',
+  PHONENUMBER = 'phonenumber',
+  ADDRESS = 'address',
+}
+
 export const EXCEPTION_PROFILE = {
   PROFILE_NOT_FOUND: {
     message: 'PROFILE NOT FOUND',
