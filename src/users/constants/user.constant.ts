@@ -1,7 +1,7 @@
 import {
   swaggerSchemaArr,
   swaggerSchemaExample,
-} from 'src/common/utils/swagger.util';
+} from '../../../src/common/utils/swagger.util';
 import { UserEntity } from '../entities/user.entity';
 
 export const USER_CONST = {

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TopicRepository } from './topic.repository';
 import { Like } from 'typeorm';
 import { TOPICS_DEFAULT } from './constants/topic.constant';
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 
 @Injectable()
 export class TopicsService {
@@ -12,7 +12,7 @@ export class TopicsService {
     try {
       const foundExisted = await this.topicRepository.findExistedRecord();
       if (foundExisted.length !== 0) return;
-      TOPICS_DEFAULT.forEach((topic) => (topic['tId'] = 'tId-' + uuid()));
+      TOPICS_DEFAULT.forEach((topic) => (topic['tId'] = 'tId-' + v4()));
       const InitializedTopics = await this.topicRepository.save(TOPICS_DEFAULT);
       console.log('INIT TOPICS SUCCESSFULL !!!');
     } catch (error) {
@@ -34,7 +34,7 @@ export class TopicsService {
     try {
       const newTopic = {
         ...payload,
-        tId: 'tId-' + uuid(),
+        tId: 'tId-' + v4(),
         thumbnail: thumbnail.filename,
       };
       const savedTopic = await this.topicRepository.save(newTopic);

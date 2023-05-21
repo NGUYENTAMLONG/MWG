@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository, DataSource } from 'typeorm';
-import { uuid } from 'uuidv4';
+import { Like, DataSource } from 'typeorm';
+import { v4 } from 'uuid';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { ProfileEntity } from './entities/profile.entity';
-import { IAvatar } from './interfaces/avatar.interface';
 import { UserRepository } from './user.repository';
-import { QueryParamDto } from './dtos/query-param.dto';
 import { ProfileRepository } from './profile.repository';
 
 @Injectable()
@@ -61,7 +57,7 @@ export class UsersService {
       const hashedPassword = await bcrypt.hash(payload.password, saltOrRounds);
       const newUser = {
         ...payload,
-        uId: 'uId-' + uuid(),
+        uId: 'uId-' + v4(),
         password: hashedPassword,
       };
       const savedUser = await this.userRepository.save(newUser);

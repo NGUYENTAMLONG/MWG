@@ -1,6 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { S3 } from 'aws-sdk';
+import * as fs from 'fs';
+import * as csv from 'csv-parser';
 import { config } from 'dotenv';
+import * as path from 'path';
+
 config();
 
 @Injectable()
@@ -48,4 +52,25 @@ export class AppService {
   getViewname() {
     return 'kakaka';
   }
+
+
+  async uploadCSV(file){
+    return file
+  }
+  async readCSV(){
+    const results = [];
+    let arr = []
+    const csvPath = path.join(__dirname,"/assets/csv/data/temp.csv");
+      fs.createReadStream("./src/assets/csv/data/temp.csv")
+        .pipe(csv())
+        .on('data', (data) => {
+          results.push(data)})
+          .on('end', () => {
+          console.log(results)
+          // console.log(results)
+         }).on("error", function (error) {
+           console.log(error.message);
+         });
+         return {arr}
+    }
 }
