@@ -33,6 +33,6 @@ export class ProfileEntity extends BaseEntity {
   scope: string[];
 
   @OneToOne(() => UserEntity, (user) => user.profile)
-  @JoinColumn()
+  @JoinColumn({})
   user: UserEntity;
 }
