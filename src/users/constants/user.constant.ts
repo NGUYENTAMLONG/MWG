@@ -1,7 +1,7 @@
 import {
   swaggerSchemaArr,
   swaggerSchemaExample,
-} from 'src/common/utils/swagger.util';
+} from '../../../src/common/utils/swagger.util';
 import { UserEntity } from '../entities/user.entity';
 
 export const USER_CONST = {
@@ -31,6 +31,10 @@ export const EXCEPTION_USER = {
   UID_EXISTED: {
     message: 'UID EXISTED',
     code: 'user004',
+  },
+  PASSWORD_DOES_NOT_MATCH: {
+    message: 'PASSWORD DOES NOT MATCH',
+    code: 'user005',
   },
 };
 

@@ -51,6 +51,10 @@ export class TypeOrmRepository<T extends BaseEntity> {
     return this.repository.findOne(options);
   }
 
+  findOneDeleted(options: FindOneOptions<T>): Promise<T> {
+    options['withDeleted'] = true;
+    return this.repository.findOne(options);
+  }
   async findExistedRecord() {
     return this.repository.find({
       take: 1,

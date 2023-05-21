@@ -1,15 +1,7 @@
-import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsEmail,
-  IsEmpty,
-  IsJSON,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsJSON, IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateQuestionDto {
+export class UpdateOneQuestionDto {
   @ApiProperty({ description: 'question', example: 'What does the Fox say?' })
   @IsString()
   @IsNotEmpty()
@@ -45,13 +37,4 @@ export class CreateQuestionDto {
 
   @ApiPropertyOptional({ type: 'string', format: 'binary', required: false })
   image: Express.Multer.File;
-
-  // @ApiPropertyOptional({
-  //   description: 'aswer',
-  //   example: 'Answer of the question',
-  // })
-  // @IsArray()
-  // answer: object;
 }
-// export class CreateQuestionDto extends BaseQuestionDto {}
-// export class UpdateQuestionDto extends BaseQuestionDto {}

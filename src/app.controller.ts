@@ -1,7 +1,13 @@
-import { Controller, Get, Render, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AppService } from './app.service';
-import { ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
+import { ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('app')
 @Controller({ version: ['1'], path: 'app' })
@@ -12,10 +18,22 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-
-  @Get('index')
-  // @Render('index')
-  root(@Res() res: Response) {
-    return res.render('index', { message: this.appService.getViewname() });
+  @Post('upload')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  async upload(@UploadedFile('file') file) {
+    console.log(file);
+    return await this.appService.upload(file);
   }
 }
