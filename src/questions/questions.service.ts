@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { AttachmentRepository } from './attachment.repository';
 import { QuestionEntity } from './entities/question.entity';
-import { Like } from 'typeorm';
+import { DataSource, Like } from 'typeorm';
 import { v4 } from 'uuid';
 import { CreateQuestionDto } from './dtos/create-question.dto';
 import {
@@ -11,12 +11,16 @@ import {
 import { QuestionRepository } from './question.repository copy';
 import { uploadS3 } from 'src/handles/upload-s3.handle';
 import { UpdateOneQuestionDto } from './dtos/update-question.dto';
+import { generateJsonFromExcel } from '../../helpers/excel.helper';
+import { AnswerEntity } from 'src/answers/entities/answer.entity';
+import { EXCEPTION_ANSWER } from 'src/answers/contants/answer.constant';
 
 @Injectable()
 export class QuestionsService {
   constructor(
     private readonly questionRepository: QuestionRepository,
     private readonly attachmentRepository: AttachmentRepository,
+    private readonly dataSource: DataSource,
   ) {}
 
   public async getOneQuestionById(questionId: number): Promise<QuestionEntity> {
@@ -274,6 +278,74 @@ export class QuestionsService {
       };
     } catch (error) {
       return error;
+    }
+  }
+  public async createQAFromExcel():Promise<any>{
+     
+    // create a new query runner
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    // establish real database connection using our new query runner
+    await queryRunner.connect();
+
+    // lets now open a new transaction:
+    await queryRunner.startTransaction();
+    try {
+      const data = generateJsonFromExcel();
+      
+      for (const element of data) {
+        const newQuestion = {
+          qId: 'qId-' + v4(),
+          question: element.question,
+          explain: element.explain,
+          note: element.note,
+          suggest: element.suggest,
+          metadata: element.metadata,
+        };
+        const savedQuestion =  await queryRunner.manager.save(QuestionEntity, newQuestion);
+        const answers = element.answers;
+        for (const answer of answers) {
+          let foundAllAnswersOfQuestion = null;
+          if (answer.correct) {
+             foundAllAnswersOfQuestion = await this.questionRepository.findOne({
+              where:{
+                qId: newQuestion.qId
+              },
+              relations:{
+                answers:true
+              }
+            })
+            const correctAnswer = foundAllAnswersOfQuestion.answers.filter(
+              (answer, index) => {
+                return answer.correct === true;
+              },
+            );
+            if (correctAnswer.length > 0) {
+              throw new BadRequestException(
+                EXCEPTION_ANSWER.DUPLICATE_CORRECT_ANSWER,
+              );
+            }
+          }
+          const newAnswer = {
+            aId: 'aId-' + v4(),
+            content:answer.content,
+            correct:answer.correct,
+            metadata:answer.metadata,
+            question:foundAllAnswersOfQuestion,
+          };
+          const savedAnswer =  await queryRunner.manager.save(AnswerEntity, newAnswer);
+        }
+      }
+      // commit transaction now:
+      await queryRunner.commitTransaction();
+      return {success:true,message:"IMPORT DATA SUCCESSFUL !!!"};
+    } catch (error) {
+      console.log({ rollback: true, error });
+      // since we have errors let's rollback changes we made
+      await queryRunner.rollbackTransaction();
+    } finally {
+      // you need to release query runner which is manually created:
+      await queryRunner.release();
     }
   }
 }

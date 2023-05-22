@@ -91,4 +91,10 @@ export class QuestionsController {
   restoreOne(@Param('id') id: string): Promise<any> {
     return this.questionService.restoreOneQuestion(Number(id));
   }
+
+  @Get('/store-data')
+  @ApiOperation({ summary: 'Admin/User create questions and answers from excel file' })
+  restore(): Promise<any> {
+    return this.questionService.createQAFromExcel();
+  }
 }
