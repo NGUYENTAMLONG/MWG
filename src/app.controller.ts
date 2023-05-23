@@ -72,7 +72,7 @@ export class AppController {
   async readCSV() {
     return this.appService.readCSV();
   }
-  @Get('gem-excel-from-json')
+  @Get('gen-excel-from-json')
   async generateExcelFromJson(){
     return this.appService.generateExcelFromJson();
   }

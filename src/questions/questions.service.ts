@@ -292,7 +292,18 @@ export class QuestionsService {
     await queryRunner.startTransaction();
     try {
       const data = generateJsonFromExcel();
-      
+      const  checkAnswers = this.validateCorrectAnswers(data);
+      if (checkAnswers.existedCorrect && !checkAnswers.flag
+        && checkAnswers.invalidQuestions.length > 0
+        ) {
+        throw new BadRequestException(EXCEPTION_QUESTION.MORE_THAN_ONE_CORRECT_ANSWER)
+      }
+      if (!checkAnswers.existedCorrect && !checkAnswers.flag
+        && checkAnswers.invalidQuestions.length > 0
+        ) {
+        throw new BadRequestException(EXCEPTION_QUESTION.INVALID_IMPORT_DATA)
+      }
+      // return checkAnswers;
       for (const element of data) {
         const newQuestion = {
           qId: 'qId-' + v4(),
@@ -305,33 +316,12 @@ export class QuestionsService {
         const savedQuestion =  await queryRunner.manager.save(QuestionEntity, newQuestion);
         const answers = element.answers;
         for (const answer of answers) {
-          let foundAllAnswersOfQuestion = null;
-          if (answer.correct) {
-             foundAllAnswersOfQuestion = await this.questionRepository.findOne({
-              where:{
-                qId: newQuestion.qId
-              },
-              relations:{
-                answers:true
-              }
-            })
-            const correctAnswer = foundAllAnswersOfQuestion.answers.filter(
-              (answer, index) => {
-                return answer.correct === true;
-              },
-            );
-            if (correctAnswer.length > 0) {
-              throw new BadRequestException(
-                EXCEPTION_ANSWER.DUPLICATE_CORRECT_ANSWER,
-              );
-            }
-          }
           const newAnswer = {
             aId: 'aId-' + v4(),
             content:answer.content,
             correct:answer.correct,
             metadata:answer.metadata,
-            question:foundAllAnswersOfQuestion,
+            question:savedQuestion,
           };
           const savedAnswer =  await queryRunner.manager.save(AnswerEntity, newAnswer);
         }
@@ -347,5 +337,37 @@ export class QuestionsService {
       // you need to release query runner which is manually created:
       await queryRunner.release();
     }
+  }
+
+  public validateCorrectAnswers(payload: object[]) {
+    const checkAnswers = { flag: true, invalidQuestions: [], existedCorrect: true }
+    for (const question of payload) {
+      const correctAnswers = question['answers'].filter((answer) => answer.correct === true);
+      if (correctAnswers.length > 1) {
+        checkAnswers.invalidQuestions.push(question);
+      }
+      if (correctAnswers.length === 0) {
+        checkAnswers.invalidQuestions.push(question);
+        checkAnswers.existedCorrect = false;
+      }
+    }
+    if (checkAnswers.invalidQuestions.length > 0) {
+      checkAnswers.flag = false
+    }
+    return checkAnswers;
+  }
+
+  public validateAnswers(payload: object[]) {
+    const checkAnswers = { isEmpty: false , questionsWrongDto:[],answersWrongDto:[] }
+    for (const question of payload) {
+      const existedEmptyAnswer = question['answers'].length;
+      if (existedEmptyAnswer === 0) {
+        checkAnswers.isEmpty = true
+      }
+    }
+    // if (checkAnswers.invalidQuestions.length > 0) {
+    //   checkAnswers.flag = false
+    // }
+    return checkAnswers;
   }
 }
