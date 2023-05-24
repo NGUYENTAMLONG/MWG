@@ -4,8 +4,9 @@ import { FeedbackRepository } from './feedbacks.repository';
 @Injectable()
 export class FeedbacksService {
   constructor(private readonly feedbackRepository: FeedbackRepository) {}
-  create() {
-    return 'This action adds a new exam';
+
+  public async createOneFeedback(payload, feedbackImage) {
+    return {payload, feedbackImage};
   }
 
   findAll() {

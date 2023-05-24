@@ -23,6 +23,12 @@ export class FeedbackEntity extends BaseEntity {
   })
   type: FeedbackTypes;
 
+  // @Column({ enum: FeedbackTypes, default: FeedbackTypes.EXAM_FEEDBACK })
+  // type: FeedbackTypes;
+
+  @Column('simple-array', { nullable: true })
+  feedBackImages:string[]
+
   @ManyToOne(() => QuestionEntity, (question) => question.feedbacks)
   question: QuestionEntity;
 
