@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFiles,
+  Query,
 } from '@nestjs/common';
 import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FeedbacksService } from './feedbacks.service';
@@ -15,6 +16,8 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateFeedbackDto } from './dtos/create-feedback.dto';
 import { imageFileFilter } from 'src/common/utils/file.util';
 import { FeedbackTypes } from './constants/feedback.constant';
+import { QueryParamDto } from './dtos/query-param.dto';
+import { FeedbackEntity } from './entities/feedback.entity';
 
 @ApiTags('feedbacks')
 @Controller({ version: ['1'], path: 'feedbacks' })
@@ -31,27 +34,27 @@ export class FeedbacksController {
   //      fileFilter: imageFileFilter,
   //   })
   // )
-  // @ApiBody({
-  //   schema: {
-  //     type: 'object',
-  //     properties: {
-  //       message: { type: 'string'},
-  //       type: { 
-  //               type: 'enum', 
-  //               enum: [...Object.values(FeedbackTypes)],
-  //               default:Object.values(FeedbackTypes)[0]
-  //             },
-  //       questionId: { type: 'number', nullable: true },
-  //       answerId: { type: 'number', nullable: true},
-  //       feedbackImages: {
-  //         type: 'array',
-  //         maxLength:2,
-  //         items: { type: 'string', format: 'binary' },
-  //       },
-  //     },
-  //   },
-  // }
-  // )
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string'},
+        type: { 
+                type: 'enum', 
+                enum: [...Object.values(FeedbackTypes)],
+                default:Object.values(FeedbackTypes)[0]
+              },
+        questionId: { type: 'number', nullable: true },
+        answerId: { type: 'number', nullable: true},
+        feedbackImages: {
+          type: 'array',
+          maxLength:2,
+          items: { type: 'string', format: 'binary' },
+        },
+      },
+    },
+  }
+  )
   // @ApiBody({
   //   type:CreateFeedbackDto
   // })
@@ -66,9 +69,9 @@ export class FeedbacksController {
     return this.feedbacksService.createOneFeedback(payload,feedbackImages);
   }
  // https://stackoverflow.com/questions/66605192/file-uploading-along-with-other-data-in-swagger-nestjs
-  @Get()
-  findAll() {
-    return this.feedbacksService.findAll();
+  @Get('')
+  findAllFeedbacks(@Query() queries: QueryParamDto): Promise<FeedbackEntity> {
+    return this.feedbacksService.findAllFeedbacks(queries);
   }
 
   @Get(':id')
