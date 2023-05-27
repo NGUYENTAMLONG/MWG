@@ -41,7 +41,7 @@ import { Auth } from 'src/auth/auth.decorator';
 import { PermissionType } from 'src/permissions/constants/permission.constant';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { editFileName } from 'helpers/file.helper';
+import { editFileName } from '../../helpers/file.helper';
 import { imageFileFilter } from 'src/validators/validation-file';
 
 @ApiTags('topics')

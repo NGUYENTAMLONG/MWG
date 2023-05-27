@@ -1,4 +1,4 @@
-import { BaseEntity } from 'src/database/base/entity.base';
+import { BaseEntity } from '../../../src/database/base/entity.base';
 import { Entity, Column, Index, ManyToOne } from 'typeorm';
 import { ATTACHMENT_CONST } from '../contants/question.constant';
 import { QuestionEntity } from './question.entity';

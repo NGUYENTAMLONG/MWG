@@ -1,4 +1,4 @@
-import { BaseEntity } from 'src/database/base/entity.base';
+import { BaseEntity } from '../../../src/database/base/entity.base';
 import { Entity, Column, Index, ManyToOne } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { FEEDBACK_CONST, FeedbackTypes } from '../constants/feedback.constant';

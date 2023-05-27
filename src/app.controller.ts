@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Render,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -9,7 +10,7 @@ import { AppService } from './app.service';
 import { ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { editFileName } from 'helpers/file.helper';
+import { editFileName } from '../helpers/file.helper';
 import { csvFileFilter } from './validators/validation-file';
 
 @ApiTags('app')
@@ -20,6 +21,12 @@ export class AppController {
   @Get('health-check')
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get('get-page')
+  @Render('index') // Render the 'index.ejs' template
+  getIndex() {
+    return { message: 'Hello, world!' };
   }
 
   @Post('upload')
@@ -72,5 +79,23 @@ export class AppController {
   async readCSV() {
     return this.appService.readCSV();
   }
+  @Get('test-data')
+  async testData() {
+    const jsonData = [
+      {
+        name: 'John Doe',
+        age: 30,
+        address: { street: '123 Main St', city: 'New York' },
+      },
+      {
+        name: 'Jane Smith',
+        age: 35,
+        address: { street: '456 Elm St', city: 'Los Angeles' },
+      },
+    ];
 
+    const filePath = './src/assets/csv/data/test.xlsx';
+
+    return this.appService.generateExcelFromJson(jsonData, filePath);
+  }
 }

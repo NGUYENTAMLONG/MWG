@@ -1,4 +1,4 @@
-import { BaseEntity } from 'src/database/base/entity.base';
+import { BaseEntity } from '../../../src/database/base/entity.base';
 import { Entity, Column, Index, OneToOne, JoinColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { Gender, PROFILE_CONST, Scope } from '../constants/profile.constant';
