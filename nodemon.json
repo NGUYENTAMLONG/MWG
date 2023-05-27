@@ -1,4 +1,5 @@
 {
-  "watch": ["views"],
-  "ext": "hbs,ejs"
+  "watch": ["src", "views"],
+  "ext": "ts,ejs",
+  "exec": "ts-node src/main.ts"
 }

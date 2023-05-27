@@ -1,4 +1,4 @@
-import { BaseEntity } from 'src/database/base/entity.base';
+import { BaseEntity } from '../../../src/database/base/entity.base';
 import { Entity, Column, Index, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { TOPIC_CONST } from '../constants/topic.constant';

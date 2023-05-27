@@ -55,7 +55,6 @@ export class UsersService {
 
   async getUserList(query): Promise<any> {
     let condition = {};
-    console.log(query);
     if (query.search) {
       condition = [
         { username: Like(`%${query.search}%`) },

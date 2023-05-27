@@ -1,4 +1,4 @@
-import { BaseEntity } from 'src/database/base/entity.base';
+import { BaseEntity } from '../../../src/database/base/entity.base';
 import { Entity, Column, Index, ManyToOne, OneToMany } from 'typeorm';
 import { LEVEL_CONST } from '../contants/level.constant';
 import { ExamEntity } from 'src/exams/entities/exam.entity';
