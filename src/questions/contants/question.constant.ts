@@ -25,4 +25,16 @@ export const EXCEPTION_QUESTION = {
     message: 'QID EXISTED',
     code: 'question003',
   },
+  INVALID_IMPORT_DATA: {
+    message: 'INVALID IMPORT DATA',
+    code: 'question004',
+  },
+  MORE_THAN_ONE_CORRECT_ANSWER: {
+    message: 'MORE THAN ONE CORRECT ANSWER',
+    code: 'question005',
+  },
+  HAS_NO_CORRECT_ANSWER:{
+    message: 'HAS NO CORRECT ANSWERS',
+    code: 'question006',
+  }
 };

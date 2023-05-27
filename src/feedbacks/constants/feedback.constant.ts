@@ -13,6 +13,19 @@ export enum FeedbackTypes {
   QUESTION_FEEDBACK = 'question feedback',
 }
 
-export const EXCEPTION_FEEDBACK = {};
+export const EXCEPTION_FEEDBACK = {
+  FEEDBACK_NOT_FOUND: {
+    message: 'FEEDBACK NOT FOUND',
+    code: 'feedback001',
+  },
+  FEEDBACK_EXISTED: {
+    message: 'FEEDBACK EXISTED',
+    code: 'feedback002',
+  },
+  SID_EXISTED: {
+    message: 'QID EXISTED',
+    code: 'feedback003',
+  },
+};
 
 export const FEEDBACK_SWAGGER_RESPONSE = {};
