@@ -98,4 +98,12 @@ export class AppController {
 
     return this.appService.generateExcelFromJson(jsonData, filePath);
   }
+  // @Get('gen-excel-from-json')
+  // async generateExcelFromJson() {
+  //   return this.appService.generateExcelFromJson();
+  // }
+  @Get('gen-json-from-excel')
+  async generateJsonFromExcel() {
+    return this.appService.generateJsonFromExcel();
+  }
 }
